@@ -18,7 +18,7 @@ client = genai.Client(api_key=api_key)
 # 2. Page Configuration (Set to dark theme base defaults)
 st.set_page_config(
     page_title="GS-Flow Studio", 
-    page_icon="⚡", 
+    page_icon="logo.png", 
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -124,9 +124,9 @@ st.markdown("""
     <div style='display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;'>
         <div>
             <h1 style='font-size: 1.6rem; font-weight: 700; color: #ffffff; margin: 0; letter-spacing: -0.03em;'>GS-FLOW <span style='color: #6366f1;'>STUDIO</span></h1>
-            <p style='color: #475569; font-size: 0.8rem; margin: 2px 0 0 0; font-weight: 500; letter-spacing: 0.05em;'>LIVE INTERACTIVE CORE v2.5</p>
+            <p style='color: #475569; font-size: 0.8rem; margin: 2px 0 0 0; font-weight: 500; letter-spacing: 0.05em;'>A PRODUCT BY MGOC</p>
         </div>
-        <div class='status-badge'>● ONLINE</div>
+        <div class='status-badge'>● ENGINE ON</div>
     </div>
 """, unsafe_allow_html=True)
 
@@ -164,7 +164,7 @@ with right_workspace:
             st.toast("Input required.", icon="⚠️")
             st.markdown("<p style='color: #334155; font-size: 0.9rem; font-style: italic;'>Awaiting execution signals...</p>", unsafe_allow_html=True)
         else:
-            with st.spinner("Processing through Gemini Engine..."):
+            with st.spinner("Processing through GS Engine..."):
                 prompt = f"""
                 You are an elite content strategist. Analyze this script and construct high-performance distribution assets.
                 
