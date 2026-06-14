@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GS-FLOW STUDIO // AI Content Automation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #000000;
+            color: #f1f5f9;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            padding: 40px 20px;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        .logo-area { display: flex; align-items: center; gap: 15px; }
+        .logo-img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
+        h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.03em; }
+        h1 span { color: #6366f1; }
+        .subtitle { color: #475569; font-size: 0.8rem; font-weight: 500; letter-spacing: 0.05em; margin-top: 2px; }
+        .status { display: inline-block; padding: 4px 12px; background: rgba(16, 185, 129, 0.06); border: 1px solid rgba(16, 185, 129, 0.15); color: #34d399; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        
+        .workspace { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .panel { background: #090d16; border: 1px solid #1e293b; border-radius: 14px; padding: 24px; display: flex; flex-direction: column; }
+        .panel h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 4px; }
+        .panel p { color: #475569; font-size: 0.8rem; margin-bottom: 20px; }
+        
+        textarea {
+            width: 100%; height: 250px; background-color: #020617; border: 1px solid #334155; border-radius: 8px; color: #f1f5f9; padding: 15px; font-family: inherit; font-size: 0.95rem; line-height: 1.6; resize: none; outline: none; transition: border-color 0.2s;
+        }
+        textarea:focus { border-color: #6366f1; }
+        
+        button {
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%); color: white; border: none; padding: 14px; font-weight: 600; border-radius: 8px; margin-top: 20px; cursor: pointer; font-size: 1rem; transition: transform 0.1s, opacity 0.2s;
+        }
+        button:hover { opacity: 0.9; }
+        button:active { transform: scale(0.99); }
+        
+        .asset-card { background: #020617; border: 1px solid #1e293b; border-radius: 10px; padding: 18px; margin-top: 14px; display: none; }
+        .asset-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: #818cf8; font-weight: 700; margin-bottom: 6px; }
+        .asset-content { color: #f1f5f9; font-size: 1rem; line-height: 1.5; white-space: pre-wrap; }
+        .placeholder-text { color: #334155; font-style: italic; text-align: center; margin: auto 0; padding: 40px 0; }
+        
+        @media (max-width: 768px) { .workspace { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-area">
+                <img src="logo.png" alt="Logo" class="logo-img" onerror="this.style.display='none'">
+                <div>
+                    <h1>GS-FLOW <span>STUDIO</span></h1>
+                    <div class="subtitle">PRODUCTION PLATFORM v3.0</div>
+                </div>
+            </div>
+            <div class="status">● NETWORK ALIVE</div>
+        </header>
+
+        <div class="workspace">
+            <div class="panel">
+                <h3>Source Narrative</h3>
+                <p>Input your raw scripts or creative thought drafts.</p>
+                <textarea id="scriptInput" placeholder="Drop your script text here..."></textarea>
+                <button id="genBtn" onclick="synthesizeAssets()">Synthesize Assets →</button>
+            </div>
+
+            <div class="panel">
+                <h3>Distribution Kit Matrix</h3>
+                <p>AI-optimized assets generate instantaneously.</p>
+                <div id="placeholder" class="placeholder-text">Awaiting execution signals...</div>
+                
+                <div id="titleCard" class="asset-card">
+                    <div class="asset-label">🎯 Optimized Headline / Viral Title</div>
+                    <div id="titleOut" class="asset-content"></div>
+                </div>
+                <div id="captionCard" class="asset-card">
+                    <div class="asset-label">📸 Distribution Caption & Metadata</div>
+                    <div id="captionOut" class="asset-content"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function synthesizeAssets() {
+            const script = document.getElementById('scriptInput').value.trim();
+            if (!script) return alert('Please enter a script first!');
+            
+            const btn = document.getElementById('genBtn');
+            const placeholder = document.getElementById('placeholder');
+            const tCard = document.getElementById('titleCard');
+            const cCard = document.getElementById('captionCard');
+            
+            btn.innerText = 'Processing via Neural Engine...';
+            btn.disabled = true;
+            
+            try {
+                const response = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ script: script })
+                });
+                const data = await response.json();
+                
+                placeholder.style.display = 'none';
+                tCard.style.display = 'block';
+                cCard.style.display = 'block';
+                
+                document.getElementById('titleOut').innerText = data.title;
+                document.getElementById('captionOut').innerText = data.caption;
+            } catch (err) {
+                alert('Operational failure checking engine link.');
+            } finally {
+                btn.innerText = 'Synthesize Assets →';
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>
